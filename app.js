@@ -34,7 +34,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your frontend URL
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3001",
+      "https://dulce-tentacion-admin.netlify.app",
+    ],
   })
 );
 
