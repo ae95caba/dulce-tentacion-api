@@ -5,7 +5,10 @@ const user_controller = require("../controllers/userController");
 /* GET home page. */
 router.get("/", user_controller.user_list);
 
-router.post("/signup", user_controller.user_signup);
+if (process.env.NODE_ENV !== "production") {
+  // Only enable this route in development
+  router.post("/signup", user_controller.user_signup);
+}
 
 //sends token on 200
 router.post("/signin", user_controller.user_signin);
