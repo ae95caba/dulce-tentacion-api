@@ -15,6 +15,7 @@ var app = express();
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 const mongoDB = process.env.MONGODB_URI || process.env.DEV_DB_URL;
+console.log(mongoDB);
 
 main().catch((err) => console.log(err));
 async function main() {
@@ -33,8 +34,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 const allowedOrigins =
-  process.env.CLIENTSCORS_ALLOWED_ORIGINS.split(",") ||
+  process.env.CLIENTSCORS_ALLOWED_ORIGINS?.split(",") ||
   process.env.DEV_CORS_ALLOWED_ORIGINS.split(",");
+console.log(allowedOrigins);
 app.use(
   cors({
     origin: allowedOrigins,

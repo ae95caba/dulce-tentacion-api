@@ -114,6 +114,8 @@ exports.product_update = [
       _id: req.params.id, // This is required, or a new ID will be assigned!
     });
 
+    console.log(`updated product ${updatedProduct}`);
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(422).json({ error: "Validation failed" });
@@ -121,6 +123,14 @@ exports.product_update = [
       try {
         jwt.verify(req.token, "secretkey");
         await Product.findByIdAndUpdate(req.params.id, updatedProduct, {});
+        //delte missing flavours field
+        if (!updatedProduct.flavours) {
+          await Product.findByIdAndUpdate(
+            req.params.id,
+            { $unset: { flavours: 1 } },
+            {}
+          );
+        }
         res.status(200).json({});
       } catch (error) {
         console.log("Error occurred bro:", error);
