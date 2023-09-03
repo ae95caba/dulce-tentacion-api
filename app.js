@@ -32,12 +32,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+const allowedOrigins =
+  process.env.CLIENTSCORS_ALLOWED_ORIGINS.split(",") ||
+  process.env.DEV_CORS_ALLOWED_ORIGINS.split(",");
 app.use(
   cors({
-    origin: [
-      "https://dulce-tentacion-admin.netlify.app",
-      "https://dulce-tentacion-mp.netlify.app",
-    ],
+    origin: allowedOrigins,
   })
 );
 
