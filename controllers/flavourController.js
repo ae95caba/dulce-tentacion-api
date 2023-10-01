@@ -64,7 +64,7 @@ exports.flavour_create = [
 ];
 
 exports.flavour_list = asyncHandler(async (req, res, next) => {
-  const flavours = await Flavour.find().exec();
+  const flavours = await Flavour.find().sort({ name: 1 }).exec();
   console.log(`the flavours are ${flavours}`);
   res.json(flavours);
 });
