@@ -77,8 +77,8 @@ exports.product_create = [
 ];
 
 exports.product_list = asyncHandler(async (req, res, next) => {
-  const products = await Product.find().exec();
-  console.log(`the products are ${products}`);
+  const products = await Product.find().sort({ price: -1 }).exec();
+
   res.json(products);
 });
 

@@ -7,6 +7,7 @@ router.get("/", user_controller.user_list);
 
 if (process.env.NODE_ENV !== "production") {
   // Only enable this route in development
+  console.log(`node env: ${process.env.NODE_ENV}`);
   router.post("/signup", user_controller.user_signup);
 }
 

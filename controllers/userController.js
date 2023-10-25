@@ -76,10 +76,11 @@ exports.user_signin = [
     const errors = validationResult(req);
 
     // Create a BookInstance object with escaped and trimmed data.
+    console.log("user sign in controller");
     console.log(`body content is:${JSON.stringify(req.body)}`);
 
     const user = await User.find({ username: req.body.username });
-
+    console.log(req.body.username);
     if (!errors.isEmpty()) {
       // There are errors.
 
