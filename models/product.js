@@ -8,6 +8,7 @@ const ProductSchema = new Schema({
   flavours: { type: Number, required: false },
   outOfStock: { type: Boolean, required: true },
   price: { type: Number, required: true },
+  description: { type: String, required: false },
 });
 
 // Export model

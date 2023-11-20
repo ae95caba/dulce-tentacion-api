@@ -40,7 +40,10 @@ exports.product_create = [
     .escape()
     .isNumeric()
     .withMessage("Flavours must be a valid number"),
-
+  body("description")
+    .optional() // Allows the field to be absent
+    .trim()
+    .escape(),
   // Process request after validation and sanitization.
 
   async (req, res, next) => {
@@ -55,6 +58,7 @@ exports.product_create = [
       price: req.body.price,
       imgUrl: he.decode(req.body.imgUrl),
       outOfStock: req.body.outOfStock,
+      description: req.body.description,
       flavours: req.body.flavours,
     });
 
@@ -88,7 +92,10 @@ exports.product_update = [
   body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
 
   body("price", "price must be specified").trim().escape().isNumeric(),
-
+  body("description")
+    .optional() // Allows the field to be absent
+    .trim()
+    .escape(),
   body("imgUrl", "imgUrl must be specified")
     .trim()
     .isLength({ min: 1 })
@@ -109,6 +116,7 @@ exports.product_update = [
       name: he.decode(req.body.name),
       price: req.body.price,
       imgUrl: he.decode(req.body.imgUrl),
+      description: req.body.description,
       outOfStock: req.body.outOfStock,
       flavours: req.body.flavours,
       _id: req.params.id, // This is required, or a new ID will be assigned!
