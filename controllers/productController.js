@@ -122,7 +122,7 @@ exports.product_update = [
       _id: req.params.id, // This is required, or a new ID will be assigned!
     });
 
-    console.log(`updated product ${updatedProduct}`);
+    console.log(`updated product ${updatedProduct}  `);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
