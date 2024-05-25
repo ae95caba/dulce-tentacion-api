@@ -9,6 +9,8 @@ const flavour_controller = require("../controllers/flavourController");
 /* GET users listing. */
 router.get("/", flavour_controller.flavour_list);
 
+router.get("/schema", flavour_controller.flavour_schema);
+
 router.post("/", flavour_controller.flavour_create);
 
 router.delete("/:id", flavour_controller.flavour_delete);

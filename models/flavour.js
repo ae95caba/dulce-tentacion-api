@@ -6,7 +6,7 @@ const FlavourSchema = new Schema({
   name: { type: String, required: true },
   outOfStock: {
     type: Boolean,
-    required: true,
+    required: false,
   },
 });
 

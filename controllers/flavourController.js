@@ -20,6 +20,23 @@ function getBearerHeaderToSetTokenStringOnReq(req, res, next) {
   }
 }
 
+exports.flavour_schema = asyncHandler(async (req, res, next) => {
+  //
+  const schema = Flavour.schema.paths;
+  const schemaDetails = Object.keys(schema)
+    .filter((key) => !key.startsWith("_")) // Filter out keys starting with '_'
+    .map((key) => {
+      return {
+        key: key,
+        type: schema[key].instance,
+        required: schema[key].isRequired ? true : false,
+      };
+    });
+  console.log(`schema is ${JSON.stringify(schemaDetails)}`);
+  //
+  res.json(schemaDetails);
+});
+
 exports.flavour_create = [
   getBearerHeaderToSetTokenStringOnReq,
   // Validate body and sanitize fields.

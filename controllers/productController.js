@@ -30,10 +30,12 @@ exports.product_create = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("outOfStock", "outOfStock must be specified")
+  body("outOfStock")
+    .optional() // Allows the field to not be present
     .trim()
     .escape()
-    .isBoolean(),
+    .isBoolean()
+    .withMessage("outOfStock must be a boolean value"),
   body("flavours")
     .optional() // Allows the field to be absent
     .trim()
@@ -50,6 +52,7 @@ exports.product_create = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
+    console.log(`errors :${JSON.stringify(errors)}`);
     // Create a BookInstance object with escaped and trimmed data.git
     console.log(`body content is:${JSON.stringify(req.body)}`);
 
@@ -82,8 +85,25 @@ exports.product_create = [
 
 exports.product_list = asyncHandler(async (req, res, next) => {
   const products = await Product.find().sort({ price: -1 }).exec();
-
+  console.log(`response is ${JSON.stringify(products)}`);
   res.json(products);
+});
+
+exports.product_schema = asyncHandler(async (req, res, next) => {
+  //
+  const schema = Product.schema.paths;
+  const schemaDetails = Object.keys(schema)
+    .filter((key) => !key.startsWith("_")) // Filter out keys starting with '_'
+    .map((key) => {
+      return {
+        key: key,
+        type: schema[key].instance,
+        required: schema[key].isRequired ? true : false,
+      };
+    });
+  console.log(`schema is ${JSON.stringify(schemaDetails)}`);
+  //
+  res.json(schemaDetails);
 });
 
 exports.product_update = [
