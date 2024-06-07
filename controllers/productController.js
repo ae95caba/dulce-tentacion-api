@@ -162,7 +162,7 @@ exports.product_update = [
         res.status(200).json({});
       } catch (error) {
         console.log("Error occurred bro:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: error });
       }
     }
   },
