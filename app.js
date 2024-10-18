@@ -4,10 +4,11 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 require("dotenv").config();
-var indexRouter = require("./routes/index");
+
 var usersRouter = require("./routes/users");
 var productsRouter = require(`./routes/products`);
-var flavoursRouter = require(`./routes/flavours`);
+
+var genericRouter = require(`./routes/generic`);
 const cors = require("cors");
 var app = express();
 const helmet = require("helmet");
@@ -53,10 +54,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use("/", indexRouter);
+app.use("/generic", genericRouter);
 app.use("/users", usersRouter);
 app.use("/products", productsRouter);
-app.use("/flavours", flavoursRouter);
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
