@@ -3,6 +3,7 @@ function getModel(type) {
   const models = {
     flavour: require("../models/flavour"),
     sauce: require("../models/sauce"),
+    crock: require("../models/crock"),
   };
 
   // Check if the type exists in the models object
