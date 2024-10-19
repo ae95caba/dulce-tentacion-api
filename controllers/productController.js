@@ -51,6 +51,7 @@ exports.product_create = [
       outOfStock: req.body.outOfStock,
       description: req.body.description,
       flavours: req.body.flavours,
+      apiRoute: req.body.apiRoute,
     });
 
     if (!errors.isEmpty()) {
@@ -104,6 +105,7 @@ exports.product_update = [
       description: req.body.description,
       outOfStock: req.body.outOfStock,
       flavours: req.body.flavours,
+      apiRoute: req.body.apiRoute,
       _id: req.params.id, // This is required, or a new ID will be assigned!
     });
 
