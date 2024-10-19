@@ -4,17 +4,13 @@ const { body, validationResult } = require("express-validator");
 const he = require("he");
 const getModel = require("../utils/getModel");
 
-function getBearerHeaderToSetTokenStringOnReq(req, res, next) {
-  const bearerHeader = req.headers?.authorization;
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    next();
-  }
-}
+const validation = [
+  body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
+  body("outOfStock", "outOfStock must be specified")
+    .trim()
+    .escape()
+    .isBoolean(),
+];
 
 exports.schema = asyncHandler(async (req, res, next) => {
   const Model = getModel(req.params.type);
@@ -33,12 +29,7 @@ exports.schema = asyncHandler(async (req, res, next) => {
 });
 
 exports.create = [
-  getBearerHeaderToSetTokenStringOnReq,
-  body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
-  body("outOfStock", "outOfStock must be specified")
-    .trim()
-    .escape()
-    .isBoolean(),
+  ...validation,
 
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -71,12 +62,7 @@ exports.list = asyncHandler(async (req, res, next) => {
 });
 
 exports.update = [
-  getBearerHeaderToSetTokenStringOnReq,
-  body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
-  body("outOfStock", "outOfStock must be specified")
-    .trim()
-    .escape()
-    .isBoolean(),
+  ...validation,
 
   async (req, res, next) => {
     const Model = getModel(req.params.type);
@@ -103,7 +89,6 @@ exports.update = [
 ];
 
 exports.delete = [
-  getBearerHeaderToSetTokenStringOnReq,
   async (req, res, next) => {
     try {
       const Model = getModel(req.params.type);

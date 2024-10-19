@@ -3,50 +3,38 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const he = require("he");
-function getBearerHeaderToSetTokenStringOnReq(req, res, next) {
-  const bearerHeader = req.headers?.authorization;
-  if (typeof bearerHeader !== "undefined") {
-    //bearer header format : Bearer <token>
 
-    const bearer = bearerHeader.split(" ");
-
-    const bearerToken = bearer[1];
-
-    req.token = bearerToken;
-    next();
-  } else {
-    next();
-  }
-}
-
-exports.product_create = [
-  getBearerHeaderToSetTokenStringOnReq,
-  // Validate body and sanitize fields.
+// Common validation for product fields
+const validation = [
   body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
-
+  body("apiUrl")
+    .optional()
+    .isString()
+    .trim()
+    .escape()
+    .withMessage("apiUrl must be a string value and at least 1 character long"),
   body("price", "price must be specified").trim().escape().isNumeric(),
-
   body("imgUrl", "imgUrl must be specified")
     .trim()
     .isLength({ min: 1 })
     .escape(),
   body("outOfStock")
-    .optional() // Allows the field to not be present
+    .optional()
     .trim()
     .escape()
     .isBoolean()
     .withMessage("outOfStock must be a boolean value"),
   body("flavours")
-    .optional() // Allows the field to be absent
+    .optional()
     .trim()
     .escape()
     .isNumeric()
     .withMessage("Flavours must be a valid number"),
-  body("description")
-    .optional() // Allows the field to be absent
-    .trim()
-    .escape(),
-  // Process request after validation and sanitization.
+  body("description").optional().trim().escape(),
+];
+
+exports.product_create = [
+  ...validation, // Spread the common validation array
 
   async (req, res, next) => {
     // Extract the validation errors from a request.
@@ -107,30 +95,7 @@ exports.product_schema = asyncHandler(async (req, res, next) => {
 });
 
 exports.product_update = [
-  getBearerHeaderToSetTokenStringOnReq,
-  // Validate body and sanitize fields.
-  body("name", "name must be specified").trim().isLength({ min: 1 }).escape(),
-
-  body("price", "price must be specified").trim().escape().isNumeric(),
-  body("description")
-    .optional() // Allows the field to be absent
-    .trim()
-    .escape(),
-  body("imgUrl", "imgUrl must be specified")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("outOfStock", "outOfStock must be specified")
-    .trim()
-    .escape()
-    .isBoolean(),
-  body("flavours")
-    .optional() // Allows the field to be absent
-    .trim()
-    .escape()
-    .isNumeric()
-    .withMessage("Flavours must be a valid number"),
-
+  ...validation, // Spread the common validation array
   async (req, res, next) => {
     const updatedProduct = new Product({
       name: he.decode(req.body.name),
@@ -169,7 +134,6 @@ exports.product_update = [
 ];
 
 exports.product_delete = [
-  getBearerHeaderToSetTokenStringOnReq,
   async (req, res, next) => {
     try {
       //if v erification vails , an error will be thrown

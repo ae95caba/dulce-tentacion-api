@@ -9,6 +9,7 @@ const ProductSchema = new Schema({
   outOfStock: { type: Boolean, required: false },
   price: { type: Number, required: true },
   description: { type: String, required: false },
+  apiRoute: { type: String, required: false },
 });
 
 // Export model

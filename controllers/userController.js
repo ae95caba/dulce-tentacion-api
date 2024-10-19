@@ -4,14 +4,7 @@ const bcrypt = require("bcryptjs");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
-exports.user_list = (req, res, next) => {
-  res.render("index", { title: "Express" });
-};
-
-//account creation
-//no json token code here, only bcrypt
-exports.user_signup = [
-  // Validate body and sanitize fields.
+const validation = [
   body("username", "username must be specified")
     .trim()
     .isLength({ min: 1 })
@@ -20,6 +13,16 @@ exports.user_signup = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
+];
+
+exports.user_list = (req, res, next) => {
+  res.render("index", { title: "Express" });
+};
+
+//account creation
+//no json token code here, only bcrypt
+exports.user_signup = [
+  ...validation,
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
@@ -61,14 +64,7 @@ exports.user_signup = [
 //log in
 exports.user_signin = [
   // Validate body and sanitize fields.
-  body("username", "username must be specified")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("password", "password must be specified")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
+  ...validation,
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
@@ -125,23 +121,9 @@ exports.user_signin = [
 //format of token
 //Authorization: Bearer <token>
 //we add the word Bearer because is the standard
-function getBearerHeaderToSetTokenStringOnReq(req, res, next) {
-  console.log("function getBearerHeaderToSetTokenStringOnReq");
-  const bearerHeader = req.headers?.authorization;
-  if (typeof bearerHeader !== "undefined") {
-    //bearer header format : Bearer <token>
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-}
 
 //verify further auth after initial log in
 exports.user_auth = [
-  getBearerHeaderToSetTokenStringOnReq,
   asyncHandler(async (req, res, next) => {
     //authData is what i passed in the jwt.sign
     jwt.verify(req.token, "secretkey", (err, authData) => {
