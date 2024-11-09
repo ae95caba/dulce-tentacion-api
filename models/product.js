@@ -10,6 +10,11 @@ const ProductSchema = new Schema({
   price: { type: Number, required: true },
   description: { type: String, required: false },
   apiRoute: { type: String, required: false },
+  type: {
+    type: String,
+    enum: ["add-ons"], // Replace with actual options
+    required: false,
+  },
 });
 
 // Export model
