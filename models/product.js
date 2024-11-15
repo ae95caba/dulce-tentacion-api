@@ -10,6 +10,11 @@ const ProductSchema = new Schema({
   price: { type: Number, required: true },
   description: { type: String, required: false },
   apiRoute: { type: String, required: false },
+  type: {
+    type: String,
+    enum: ["frozen-treat", "ice-cream", "add-on"],
+    required: true,
+  },
 });
 
 // Export model
