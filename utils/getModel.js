@@ -6,6 +6,7 @@ function getModel(type) {
     crock: require("../models/crock"),
     cream: require("../models/cream"),
     osito: require("../models/osito"),
+    alfamio: require("../models/alfamio"),
   };
 
   // Check if the type exists in the models object
