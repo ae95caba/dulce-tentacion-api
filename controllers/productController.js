@@ -52,6 +52,7 @@ exports.product_create = [
       description: req.body.description,
       flavours: req.body.flavours,
       apiRoute: req.body.apiRoute,
+      type: req.body.type,
     });
 
     if (!errors.isEmpty()) {
