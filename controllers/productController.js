@@ -58,7 +58,7 @@ exports.product_create = [
     if (!errors.isEmpty()) {
       // There are errors.
 
-      res.status(422).json({ error: "Validation failed" });
+      res.status(422).json({ error: "Body validation failed" });
       return;
     } else {
       try {
@@ -68,6 +68,15 @@ exports.product_create = [
         res.status(200).json({ product });
       } catch (err) {
         console.log(err);
+        // Check if it's a validation error from Mongoose
+        if (err.name === "ValidationError") {
+          return res.status(422).json({ error: "Schema validation Failed" });
+        }
+
+        // For other errors, return a generic error message
+        res
+          .status(500)
+          .json({ message: "Something went wrong", error: err.message });
       }
     }
   },
