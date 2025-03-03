@@ -8,6 +8,7 @@ const FlavourSchema = new Schema({
     type: Boolean,
     required: false,
   },
+  imgUrl: { type: String, required: false },
 });
 
 // Export model
