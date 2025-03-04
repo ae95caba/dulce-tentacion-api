@@ -24,7 +24,7 @@ exports.schema = asyncHandler(async (req, res, next) => {
         required: schema[key].isRequired ? true : false,
       };
     });
-  console.log(`schema is ${JSON.stringify(schemaDetails)}`);
+
   res.json(schemaDetails);
 });
 
@@ -57,7 +57,7 @@ exports.create = [
 exports.list = asyncHandler(async (req, res, next) => {
   const Model = getModel(req.params.type);
   const items = await Model.find().sort({ name: 1 }).exec();
-  console.log(`the items are ${items}`);
+
   res.json(items);
 });
 
@@ -65,11 +65,13 @@ exports.update = [
   ...validation,
 
   async (req, res, next) => {
+    console.log(req.body);
     const Model = getModel(req.params.type);
     const updatedItem = new Model({
       name: he.decode(req.body.name),
       outOfStock: req.body.outOfStock,
       _id: req.params.id,
+      imgUrl: !req.body.imgUrl ? null : req.body.imgUrl,
     });
 
     const errors = validationResult(req);

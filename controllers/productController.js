@@ -40,9 +40,7 @@ exports.product_create = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    console.log(`errors :${JSON.stringify(errors)}`);
     // Create a BookInstance object with escaped and trimmed data.git
-    console.log(`body content is:${JSON.stringify(req.body)}`);
 
     const product = new Product({
       name: he.decode(req.body.name),
